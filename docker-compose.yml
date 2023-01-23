@@ -1,0 +1,27 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: chat_app
+      POSTGRES_USER: chat_app
+      POSTGRES_PASSWORD: chat_app
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+  rabbitmq:
+    image: rabbitmq:latest
+    ports:
+      - "5672:5672"
+    volumes:
+      - ./data/rabbitmq:/var/lib/rabbitmq
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+    depends_on:
+      - postgres
+      - rabbitmq
